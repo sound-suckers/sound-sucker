@@ -23,11 +23,15 @@
   //  console.log("Raw data: ", data);
     var dataObj = [];
     for(var propt in data){
-      var point = {'x': data[propt].time, 'y':data[propt].sound};
+      var date = new Date(data[propt].time);
+      console.log(date);
+
+      var point = {'x': date, 'y':data[propt].sound};
       dataObj.push(point);
       //console.log((propt + ': ' + data[propt].time + ':' + data[propt].sound));
     }
-    //console.log(dataObj);
+    var date = new Date(dataObj[22].x)
+    console.log(date);
 
     var data4 = [
       {
