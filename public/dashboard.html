@@ -28,7 +28,7 @@
             </tr>
             <tr>
               <td>Current Reading</td>
-              <td>{{now}}</td>
+              <td id="soundCurrent"></td>
             </tr>
             <tr>
               <td colspan="2">
@@ -38,19 +38,25 @@
               </td>
             </tr>
             <tr>
-              <td>24 hour</td>
-              <td>{{24hr}}</td>
+              <td>One hour</td>
+              <td id="soundOne"></td>
             </tr>
             <tr>
-              <td>Weekly</td>
-              <td>
-                {{weekly}}</td>
+              <td>Twelve hour</td>
+              <td id="soundTwelve">
+              </td>
             </tr>
             <tr>
-              <td>Monthly</td>
-              <td>
-                {{monthly}}</td>
+              <td>Twenty four hour</td>
+              <td id="soundTwentyFour">
+              </td>
             </tr>
+            <tr class="warning">
+              <td >Warning Level</td>
+              <td class="warning">800
+              </td>
+            </tr>
+
           </table>
 
 
@@ -66,7 +72,7 @@
             </tr>
             <tr>
               <td>Current Reading</td>
-              <td>{{now}}</td>
+              <td id="vibrateCurrent"></td>
             </tr>
             <tr>
               <td colspan="2">
@@ -76,16 +82,21 @@
               </td>
             </tr>
             <tr>
-              <td>24 hour</td>
-              <td>{{twentyfourhour}}</td>
+              <td>One hour</td>
+              <td id="vibrateOne"></td>
             </tr>
             <tr>
-              <td>Weekly</td>
-              <td>{{weekly}}</td>
+              <td>Twelve hour</td>
+              <td id="vibrateTwelve"></td>
             </tr>
             <tr>
-              <td>Monthly</td>
-              <td>{{monthly}}</td>
+              <td>Twenty four hour</td>
+              <td id="vibrateTwentyfour"></td>
+            </tr>
+                <tr>
+              <td class="warning">Warning Level</td>
+              <td class="warning"> 2000
+              </td>
             </tr>
           </table>
 
@@ -96,13 +107,13 @@
       <div class="row">
         <div class="container">
           <a href="/twentyfourhour">
-            <button id="24hr"> 24-hour </button>
+            <button id="oneHourButton"> One Hour </button>
           </a>
           <a href="/weekly">
-            <button id="Weekly">Weekly</button>
+            <button id="twelveHourButton">Twelve Hour </button>
           </a>
           <a href="/monthly">
-            <button id "Monthly">Monthly</button>
+            <button id "twentyFourHourButton">Day</button>
           </a>
         </div>
       </div>
@@ -131,120 +142,100 @@
 </body>
 <script>
 //David's code
-  var soundLink = "https://thudiot.firebaseio.com/soundLevel.json"
-  var vibrationLink = "https://thudiot.firebaseio.com/vibration.json"
-  $.getJSON(soundLink, function showData(data){
-  //  console.log("Raw data: ", data);
+var soundLink = "https://thudiot.firebaseio.com/soundLevel.json";
+
+$.getJSON(soundLink, function showData(data) {
+    //  console.log("Raw data: ", data);
+
     var dataObj = [];
 
-    for (var propt in data){
-      var point = {
-        'x':data[propt].time,
-        'y':data[propt].sound
-      };
-      dataObj.push(point);
-    }
-
-    for(var propt in data){
-
-      var date = new Date(data[propt].time);
-      console.log(date);
-
-      var point = {'x': date, 'y':data[propt].sound};
-      dataObj.push(point);
-      console.log('XXXXXX', dataObj[0].x);
+    for (var propt in data) {
+        var point = {
+            'x': data[propt].time,
+            'y': data[propt].sound
+        };
+        dataObj.push(point);
     }
 
 
-    var data4 = [
-      {
+
+    var timeNow = Date.now();
+
+    var oneHour = timeNow - 3600000;
+    var twelveHour = timeNow - 43200000;
+    var twentyFourHour = timeNow - 86400000;
+
+    var oneHourI;
+    var twelveHourI;
+    var twentyFourHourI;
+
+    dataObj.forEach(function(elem, i) {
+        if (elem.x > oneHour) {
+            oneHourI = i;
+        } else if (elem.x > twelveHour) {
+            twelveHourI = i;
+        } else if (elem.x > twentyFourHour) {
+            twentyFourHourI = i;
+        }
+    })
+
+    console.log('oneHourI', oneHourI);
+    console.log('twentyFourHourI', twentyFourHourI);
+
+    var oneHourArray = dataObj.slice(oneHourI);
+    var twelveHourArray = dataObj.slice(twelveHourI);
+    var twentyFourHourArray = dataObj.slice(twentyFourHourI);
+
+    console.log('oneHourArray', oneHourArray);
+
+    var oneHourArrayMax = Math.max.apply(Math, oneHourArray.map(function(o) {
+        return o.y;
+    }));
+    var twelveHourArrayMax = Math.max.apply(Math, twelveHourArray.map(function(o) {
+        return o.y;
+    }));
+    var twentyFourHourArrayMax = Math.max.apply(Math, twentyFourHourArray.map(function(o) {
+        return o.y;
+    }));
+    console.log('twentyFourHourArrayMax', twentyFourHourArrayMax);
+
+    var dataObjLength = dataObj.length - 1;
+
+    console.log('dataObjLength', dataObjLength);
+
+    document.getElementById("soundCurrent").innerHTML = dataObj[dataObjLength].y;
+
+    document.getElementById("soundOne").innerHTML = oneHourArrayMax;
+
+    document.getElementById("soundTwelve").innerHTML = twelveHourArrayMax;
+
+    document.getElementById("soundTwentyFour").innerHTML = twentyFourHourArrayMax;
+
+
+
+
+    ///// chart /////////////////
+
+    twelveHourArray.forEach(function(obj) {
+
+        obj.x = new Date(obj.x);
+
+
+
+
+    });
+
+
+    console.log('TWELVE HOUR ARRAY', twelveHourArray);
+
+
+
+    var data4 = [{
         label: 'Time Stamps',
         strokeColor: 'rgba(77, 180, 73, 0.3)',
         xValueType: "dateTime",
-        data: dataObj
-      }
-    ];
 
-    var ctx4 = document.getElementById("chart").getContext("2d");
-    var myBubbleChart = new Chart(ctx4).Scatter(data4, {
-      bezierCurve: true,
-      showTooltips: true,
-      scaleShowHorizontalLines: true,
-      scaleShowLabels: true,
-      scaleBeginAtZero: true,
-      datasetStroke: false
-    });
-  });
-
-    $.getJSON(vibrationLink, function showData(data){
-    //  console.log("Raw data: ", data);
-      var dataObj = [];
-      for(var propt in data){
-
-        var date = new Date(data[propt].time);
-        var point = {'x':date, 'y':data[propt].vibration};
-        dataObj.push(point);
-        //console.log((propt + ': ' + data[propt].time + ':' + data[propt].sound));
-      }
-      //console.log(dataObj);
-
-      var data5 = [
-        {
-          label: 'Vibration',
-          strokeColor: 'rgba(77, 180, 73, 0.3)',
-          xValueType: "dateTime",
-          data: dataObj
-        }
-      ];
-
-      var ctx5 = document.getElementById("canvasVib").getContext("2d");
-      var myBubbleChart = new Chart(ctx5).Scatter(data5, {
-        bezierCurve: true,
-        showTooltips: true,
-        scaleShowHorizontalLines: true,
-        scaleShowLabels: true,
-        scaleBeginAtZero: true,
-        datasetStroke: false
-      });
-
-  });
-    //Gethin changes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Tormod changes
- 
- 
-
-/*
-    var data4 = [{
-        label: 'Bubble chart example',
-        strokeColor: 'rgba(77, 180, 73, 0.3)',
-        data: dataObj
+        data: twelveHourArray
     }];
 
     var ctx4 = document.getElementById("chart").getContext("2d");
@@ -254,10 +245,57 @@
         scaleShowHorizontalLines: true,
         scaleShowLabels: true,
         scaleBeginAtZero: true,
+        scaleType: "date",
+        datasetStroke: false
+    });
+});
+var vibrationLink = "https://thudiot.firebaseio.com/vibration.json";
+$.getJSON(vibrationLink, function showData(data) {
+    //  console.log("Raw data: ", data);
+    var dataObj = [];
+    for (var propt in data) {
+
+        var date = new Date(data[propt].time);
+        var point = {
+            'x': date,
+            'y': data[propt].vibration
+        };
+        dataObj.push(point);
+        //console.log((propt + ': ' + data[propt].time + ':' + data[propt].sound));
+    }
+    //console.log(dataObj);
+
+    var data5 = [{
+        label: 'Vibration',
+        strokeColor: 'rgba(77, 180, 73, 0.3)',
+        xValueType: "dateTime",
+        data: dataObj
+    }];
+
+    var ctx5 = document.getElementById("canvasVib").getContext("2d");
+    var myBubbleChart = new Chart(ctx5).Scatter(data5, {
+        bezierCurve: true,
+        showTooltips: true,
+        scaleShowHorizontalLines: true,
+        scaleShowLabels: true,
+        scaleBeginAtZero: true,
+        scaleType: "date",
         datasetStroke: false
     });
 
-});*/
+
+    //Vibrations information
+
+    document.getElementById("vibrateCurrent").innerHTML = 0;
+
+    document.getElementById("vibrateOne").innerHTML = 1012;
+
+    document.getElementById("vibrateTwelve").innerHTML = '-';
+
+    document.getElementById("vibrateTwentyfour").innerHTML = '-';
+
+});
+//Gethin changes
 </script>
 <script type="text/javascript" src="../assets/chart.js"></script>
 <script src="../assets/Chart.Scatter.js"></script>
