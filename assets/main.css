@@ -6,6 +6,17 @@ div#banner {
 	width:100%;
 }
 
+div#banner-content {
+	width: auto;
+	margin: 0 auto;
+	padding: 10px;
+	border: 1px solid #000;
+}
+
+div#content {
+	padding-top: 70px;
+}
+
 .container {
   width: 90%;
   margin: 50px auto;
