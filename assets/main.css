@@ -1,8 +1,14 @@
-
+div#banner {
+	position: absolute;
+	top:0;
+	left:0;
+	background-color: rgb(240,232,72);
+	width:100%;
+}
 
 .container {
   width: 90%;
-  margin: 20px auto;
+  margin: 50px auto;
 }
 
 .p {
