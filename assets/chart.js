@@ -1,4 +1,4 @@
-
+/*
 console.log('chart.js', lineChartData);
 
 
@@ -36,3 +36,4 @@ var LineChartDemo = new Chart(vib).Line(lineChartData, {
   scaleShowVerticalLines: false,
   scaleGridLineColor: "black"
 });
+*/
