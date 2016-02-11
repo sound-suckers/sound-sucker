@@ -3,7 +3,7 @@ div#banner {
        top: 0; 
        left: 0; 
        background-color: rgb(240,232,72); 
-       width: 100%; 
+       width: 80%; 
      }
      div#banner-content { 
        width: auto; 
