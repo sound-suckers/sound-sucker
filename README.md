@@ -18,3 +18,7 @@ THUD deals with a specific instance of noise pollution. It shows where and when 
 THUD works by recording the data using Intel's Edison Board. The information is sent to Hapi servers and then displayed using Chart JS. 
 
 http://damp-ridge-90487.herokuapp.com/
+
+##Theme
+http://startbootstrap.com/template-overviews/freelancer/
+https://github.com/BlackrockDigital/startbootstrap-freelancer
