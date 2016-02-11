@@ -2,13 +2,14 @@
   float: left;
   width: 100px;
   height: 100px;
-  background: #555;
+  background: rgb(240,232,72);
 }
 
 .header h1 {
   position: relative;
   top: 18px;
   left: 10px;
+  background-color: rgb(240,232,72);
 }
 div#content {
 	padding-top: 70px;
