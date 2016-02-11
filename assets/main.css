@@ -1,18 +1,15 @@
-div#banner {
-	position: absolute;
-	top:0;
-	left:0;
-	background-color: rgb(240,232,72);
-	width:100%;
+.header img {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: #555;
 }
 
-div#banner-content {
-	width: auto;
-	margin: 0 auto;
-	padding: 10px;
-	border: 1px solid #000;
+.header h1 {
+  position: relative;
+  top: 18px;
+  left: 10px;
 }
-
 div#content {
 	padding-top: 70px;
 }
