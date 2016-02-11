@@ -11,20 +11,27 @@
     <div>
       <canvas id="chart" height="450" width="600"></canvas>
     </div>
+    <div>
+      <canvas id="vib-chart" height="450" width="600"></canvas>
+    </div>
   </div>
 
 <script>
-  var connectedLink = "https://thudiot.firebaseio.com/soundLevel.json"
-
-  $.getJSON(connectedLink, function showData(data){
+  var soundLink = "https://thudiot.firebaseio.com/soundLevel.json"
+  var vibrationLink = "https://thudiot.firebaseio.com/vibration.json"
+  $.getJSON(soundLink, function showData(data){
   //  console.log("Raw data: ", data);
     var dataObj = [];
     for(var propt in data){
-      var point = {'x': data[propt].time, 'y':data[propt].sound};
+      var date = new Date(data[propt].time);
+      console.log(date);
+
+      var point = {'x': date, 'y':data[propt].sound};
       dataObj.push(point);
       //console.log((propt + ': ' + data[propt].time + ':' + data[propt].sound));
     }
-    //console.log(dataObj);
+    var date = new Date(dataObj[22].x)
+    console.log(date);
 
     var data4 = [
       {
@@ -43,6 +50,35 @@
       scaleBeginAtZero: true,
       datasetStroke: false
     });
+  });
+
+    $.getJSON(vibrationLink, function showData(data){
+    //  console.log("Raw data: ", data);
+      var dataObj = [];
+      for(var propt in data){
+        var point = {'x': data[propt].time, 'y':data[propt].vibration};
+        dataObj.push(point);
+        //console.log((propt + ': ' + data[propt].time + ':' + data[propt].sound));
+      }
+      //console.log(dataObj);
+
+      var data5 = [
+        {
+          label: 'Vibration',
+          strokeColor: 'rgba(77, 180, 73, 0.3)',
+          data: dataObj
+        }
+      ];
+
+      var ctx5 = document.getElementById("vib-chart").getContext("2d");
+      var myBubbleChart = new Chart(ctx5).Scatter(data5, {
+        bezierCurve: true,
+        showTooltips: true,
+        scaleShowHorizontalLines: true,
+        scaleShowLabels: true,
+        scaleBeginAtZero: true,
+        datasetStroke: false
+      });
 
   });
 
