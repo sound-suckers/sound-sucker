@@ -29,7 +29,7 @@
             </tr>
             <tr>
               <td>Current Reading</td>
-              <td>{{now}}</td>
+              <td id="soundCurrent"></td>
             </tr>
             <tr>
               <td colspan="2">
@@ -39,18 +39,18 @@
               </td>
             </tr>
             <tr>
-              <td>24 hour</td>
-              <td>{{24hr}}</td>
+              <td>One hour</td>
+              <td id="soundOne"></td>
             </tr>
             <tr>
-              <td>Weekly</td>
-              <td>
-                {{weekly}}</td>
+              <td>Twelve hour</td>
+              <td id="soundTwelve">
+              </td>
             </tr>
             <tr>
-              <td>Monthly</td>
-              <td>
-                {{monthly}}</td>
+              <td>Twenty four hour</td>
+              <td id="soundTwentyFour">
+              </td>
             </tr>
           </table>
 
@@ -67,7 +67,7 @@
             </tr>
             <tr>
               <td>Current Reading</td>
-              <td>{{now}}</td>
+              <td id="vibrateCurrent"></td>
             </tr>
             <tr>
               <td colspan="2">
@@ -77,16 +77,16 @@
               </td>
             </tr>
             <tr>
-              <td>24 hour</td>
-              <td>{{twentyfourhour}}</td>
+              <td>One hour</td>
+              <td id="vibrateOne"></td>
             </tr>
             <tr>
-              <td>Weekly</td>
-              <td>{{weekly}}</td>
+              <td>Twelve hour</td>
+              <td id="vibrateTwelve"></td>
             </tr>
             <tr>
-              <td>Monthly</td>
-              <td>{{monthly}}</td>
+              <td>Twenty four hour</td>
+              <td id="vibrateTwentyfour"></td>
             </tr>
           </table>
 
@@ -139,12 +139,11 @@
   </section>
 </body>
 <script>
-
-//David's code
+  //David's code
   var connectedLink = "https://thudiot.firebaseio.com/soundLevel.json"
 
   $.getJSON(connectedLink, function showData(data) {
-    //  console.log("Raw data: ", data);
+
     var dataObj = [];
     for (var propt in data) {
       var point = {
@@ -154,7 +153,59 @@
       dataObj.push(point);
     }
 
-//Gethin changes
+    //Gethin changes
+
+    var timeNow = Date.now();
+
+    var oneHour = timeNow - 3600000;
+    var twelveHour = timeNow - 43200000;
+    var twentyFourHour = timeNow - 86400000;
+
+    var oneHourI;
+    var twelveHourI;
+    var twentyFourHourI;
+
+    dataObj.forEach(function(elem, i) {
+      if (elem.x > oneHour) {
+        oneHourI = i;
+      } else if (elem.x > twelveHour) {
+        twelveHourI = i;
+      } else if (elem.x > twentyFourHour) {
+        twentyFourHourI = i;
+      }
+    })
+
+    console.log('oneHourI', oneHourI);
+    console.log('twentyFourHourI', twentyFourHourI);
+
+    var oneHourArray = dataObj.slice(oneHourI);
+    var twelveHourArray = dataObj.slice(twelveHourI);
+    var twentyFourHourArray = dataObj.slice(twentyFourHourI);
+
+    console.log('oneHourArray', oneHourArray);
+
+    var oneHourArrayMax = Math.max.apply(Math, oneHourArray.map(function(o) {
+      return o.y;
+    }));
+    var twelveHourArrayMax = Math.max.apply(Math, twelveHourArray.map(function(o) {
+      return o.y;
+    }));
+    var twentyFourHourArrayMax = Math.max.apply(Math, twentyFourHourArray.map(function(o) {
+      return o.y;
+    }));
+    console.log('twentyFourHourArrayMax', twentyFourHourArrayMax);
+
+    var dataObjLength = dataObj.length - 1;
+
+    console.log('dataObjLength', dataObjLength);
+
+    document.getElementById("soundCurrent").innerHTML = dataObj[dataObjLength].y;
+
+    document.getElementById("soundOne").innerHTML = oneHourArrayMax;
+
+    document.getElementById("soundTwelve").innerHTML = twelveHourArrayMax;
+
+    document.getElementById("soundTwentyFour").innerHTML = twentyFourHourArrayMax;
 
 
 
@@ -162,27 +213,18 @@
 
 
 
+    //Vibrations information
+
+    document.getElementById("vibrateCurrent").innerHTML = 1;
+
+    document.getElementById("vibrateOne").innerHTML = 2;
+
+    document.getElementById("vibrateTwelve").innerHTML = 3;
+
+    document.getElementById("vibrateTwentyfour").innerHTML = 4;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Tormod changes
+    //Tormod changes
     var data4 = [{
       label: 'Bubble chart example',
       strokeColor: 'rgba(77, 180, 73, 0.3)',
@@ -200,8 +242,6 @@
     });
 
   });
-
-
 </script>
 <script type="text/javascript" src="../assets/chart.js"></script>
 <script src="../assets/Chart.Scatter.js"></script>
