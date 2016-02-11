@@ -1,0 +1,51 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Playing with THUDiot</title>
+  <script src ="jquery.js"></script>
+  <script src ="Chart.min.js"></script>
+  <script src="Chart.Scatter.js"></script>
+</head>
+<body>
+  <div style="width:30%">
+    <div>
+      <canvas id="chart" height="450" width="600"></canvas>
+    </div>
+  </div>
+
+<script>
+  var connectedLink = "https://thudiot.firebaseio.com/soundLevel.json"
+
+  $.getJSON(connectedLink, function showData(data){
+  //  console.log("Raw data: ", data);
+    var dataObj = [];
+    for(var propt in data){
+      var point = {'x': data[propt].time, 'y':data[propt].sound};
+      dataObj.push(point);
+      //console.log((propt + ': ' + data[propt].time + ':' + data[propt].sound));
+    }
+    //console.log(dataObj);
+
+    var data4 = [
+      {
+        label: 'Bubble chart example',
+        strokeColor: 'rgba(77, 180, 73, 0.3)',
+        data: dataObj
+      }
+    ];
+
+    var ctx4 = document.getElementById("chart").getContext("2d");
+    var myBubbleChart = new Chart(ctx4).Scatter(data4, {
+      bezierCurve: true,
+      showTooltips: true,
+      scaleShowHorizontalLines: true,
+      scaleShowLabels: true,
+      scaleBeginAtZero: true,
+      datasetStroke: false
+    });
+
+  });
+
+</script>
+</body>
+</html>
