@@ -44,3 +44,9 @@ body { font-size: 140%; }
 	color:green;
 
 }
+
+#chart, #canvasVib {
+  width:500px;
+  height:500px;
+
+}
